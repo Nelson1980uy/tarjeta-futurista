@@ -2159,7 +2159,7 @@ body {
 
 
 /* =========================================================
-   MÓVIL
+   MÓVIL — CONTADOR
    ========================================================= */
 
 @media (max-width: 600px) {
@@ -2184,13 +2184,14 @@ body {
 
 /* =========================================================
    AUDIO ORIGINAL — PANEL PREMIUM
+   POSICIÓN: INFERIOR IZQUIERDA
    ========================================================= */
 
 .audio-download {
   position: fixed;
 
-  right: 28px;
-  bottom: 28px;
+  left: 8px;
+  bottom: 8px;
 
   width: 220px;
 
@@ -2517,7 +2518,7 @@ body {
 
 
 /* =========================================================
-   ANIMACIÓN
+   ANIMACIÓN DESDE LA IZQUIERDA
    ========================================================= */
 
 @keyframes audioPanelAppear {
@@ -2528,7 +2529,7 @@ body {
 
     transform:
       translateY(18px)
-      translateX(10px);
+      translateX(-10px);
 
   }
 
@@ -2553,9 +2554,9 @@ body {
 
   .audio-download {
 
-    right: 12px;
+    left: 8px;
 
-    bottom: 12px;
+    bottom: 8px;
 
     width: 180px;
 
