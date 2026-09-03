@@ -1,0 +1,2182 @@
+/* =========================================================
+   CONFIGURACIÓN GENERAL
+   ========================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  overflow: hidden;
+  background: #030107;
+}
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #241044 0%,
+      #0d061b 45%,
+      #030107 100%
+    );
+
+  color: white;
+}
+
+
+/* =========================================================
+   TARJETA INICIAL
+   ========================================================= */
+
+.love-card {
+  width: min(340px, 88vw);
+  min-height: 440px;
+
+  padding: 45px 35px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+
+  text-align: center;
+
+  border-radius: 30px;
+
+  background: rgba(25, 12, 48, 0.72);
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 0 50px rgba(174, 86, 255, 0.25),
+    inset 0 0 40px rgba(255, 255, 255, 0.04);
+}
+
+.card-glow {
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  border-radius: 50%;
+
+  background: #b45cff;
+
+  filter: blur(90px);
+
+  opacity: 0.2;
+
+  z-index: -1;
+}
+
+.card-icon {
+  font-size: 75px;
+
+  margin-bottom: 25px;
+
+  animation: heartbeat 1.8s infinite;
+
+  filter:
+    drop-shadow(
+      0 0 15px
+      rgba(255, 100, 200, 0.7)
+    );
+}
+
+.love-card h1 {
+  font-size: 28px;
+
+  margin-bottom: 15px;
+
+  font-weight: 600;
+}
+
+.love-card p {
+  margin-bottom: 35px;
+
+  font-size: 15px;
+
+  line-height: 1.6;
+
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.open-button {
+  padding: 15px 38px;
+
+  border-radius: 50px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.25);
+
+  background:
+    rgba(255, 255, 255, 0.1);
+
+  color: white;
+
+  font-size: 15px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.open-button:hover {
+  transform: scale(1.08);
+
+  background:
+    rgba(255, 255, 255, 0.18);
+
+  box-shadow:
+    0 0 30px
+    rgba(200, 120, 255, 0.45);
+}
+
+
+/* =========================================================
+   EXPERIENCIA
+   ========================================================= */
+
+.experience {
+  width: 100%;
+  min-height: 100vh;
+
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    clamp(18px, 4vh, 45px)
+    clamp(12px, 4vw, 60px);
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   ESTRELLAS
+   ========================================================= */
+
+.background-stars {
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,0.9) 1px,
+      transparent 1.5px
+    );
+
+  background-size: 95px 95px;
+
+  opacity: 0.25;
+
+  animation:
+    starsMove
+    18s
+    linear
+    infinite;
+}
+
+
+/* =========================================================
+   PARTÍCULAS
+   ========================================================= */
+
+.floating-particles {
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  overflow: hidden;
+}
+
+.floating-particles span {
+  position: absolute;
+
+  font-size: 18px;
+
+  opacity: 0;
+
+  animation:
+    floatingParticle
+    7s
+    infinite;
+}
+
+.floating-particles span:nth-child(1) {
+  left: 10%;
+  top: 20%;
+  animation-delay: 1s;
+}
+
+.floating-particles span:nth-child(2) {
+  left: 85%;
+  top: 25%;
+  animation-delay: 3s;
+}
+
+.floating-particles span:nth-child(3) {
+  left: 20%;
+  top: 70%;
+  animation-delay: 5s;
+}
+
+.floating-particles span:nth-child(4) {
+  left: 75%;
+  top: 75%;
+  animation-delay: 2s;
+}
+
+.floating-particles span:nth-child(5) {
+  left: 50%;
+  top: 15%;
+  animation-delay: 4s;
+}
+
+.floating-particles span:nth-child(6) {
+  left: 92%;
+  top: 60%;
+  animation-delay: 6s;
+}
+
+
+/* =========================================================
+   CABECERA
+   ========================================================= */
+
+.creator-header {
+  width: min(900px, 92vw);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap:
+    clamp(10px, 2vw, 25px);
+
+  margin-bottom:
+    clamp(15px, 3vh, 30px);
+
+  position: relative;
+
+  z-index: 20;
+
+  text-align: center;
+}
+
+.creator-header div {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.creator-header strong {
+  font-size:
+    clamp(12px, 1.8vw, 18px);
+
+  letter-spacing:
+    clamp(2px, 0.5vw, 5px);
+
+  font-weight: 500;
+
+  color: #f3d27a;
+
+  text-shadow:
+    0 0 10px
+    rgba(226, 190, 90, 0.5);
+}
+
+.creator-header small {
+  margin-top: 5px;
+
+  font-size:
+    clamp(8px, 1vw, 11px);
+
+  letter-spacing: 4px;
+
+  color:
+    rgba(255,255,255,0.55);
+}
+
+.creator-line {
+  color: #e2be5a;
+
+  font-size: 16px;
+
+  opacity: 0.8;
+}
+
+
+/* =========================================================
+   MARCO CINEMATOGRÁFICO
+   ========================================================= */
+
+.cinematic-frame {
+  width: min(900px, 94vw);
+
+  height: min(67vh, 600px);
+
+  position: relative;
+
+  padding:
+    clamp(8px, 1.2vw, 14px);
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8e6b22,
+      #f5d77b,
+      #b88a2b,
+      #f8dc82,
+      #76551c
+    );
+
+  box-shadow:
+    0 0 15px
+    rgba(226, 190, 90, 0.55),
+
+    0 0 45px
+    rgba(226, 190, 90, 0.22),
+
+    0 0 90px
+    rgba(226, 190, 90, 0.08),
+
+    inset 0 0 12px
+    rgba(255,255,255,0.5);
+
+  z-index: 5;
+
+  isolation: isolate;
+}
+
+
+/* =========================================================
+   BORDE INTERIOR
+   ========================================================= */
+
+.cinematic-frame::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 5px;
+
+  border-radius: 17px;
+
+  border:
+    1px solid
+    rgba(30,20,5,0.85);
+
+  pointer-events: none;
+
+  z-index: 15;
+}
+
+
+/* =========================================================
+   LUZ CELESTIAL DEL MARCO
+   =========================================================
+
+   Ahora son 4 luces independientes.
+
+   RECORRIDO:
+
+   ARRIBA
+      ↓
+   DERECHA
+      ↓
+   ABAJO
+      ↓
+   IZQUIERDA
+      ↓
+   ARRIBA
+
+   Esto evita completamente el efecto
+   de "rectángulo luminoso".
+   ========================================================= */
+
+.frame-light {
+  position: absolute;
+
+  pointer-events: none;
+
+  z-index: 16;
+
+  border-radius: 50px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255,255,255,0.15) 15%,
+      #fffde0 40%,
+      #ffffff 50%,
+      #ffe98a 65%,
+      rgba(255,200,60,0.15) 85%,
+      transparent 100%
+    );
+
+  box-shadow:
+    0 0 5px rgba(255,255,230,1),
+    0 0 12px rgba(255,225,120,0.95),
+    0 0 25px rgba(255,190,60,0.75);
+
+  opacity: 0;
+
+  filter:
+    blur(0.3px);
+}
+
+
+/* =========================================================
+   LUZ SUPERIOR
+   ========================================================= */
+
+.frame-light-top {
+  top: -2px;
+  left: 8%;
+  width: 84%;
+  height: 4px;
+
+  transform-origin: left center;
+
+  animation:
+    frameLightTop
+    6s
+    linear
+    infinite;
+}
+
+
+/* =========================================================
+   LUZ DERECHA
+   ========================================================= */
+
+.frame-light-right {
+  top: 8%;
+  right: -2px;
+  width: 4px;
+  height: 84%;
+
+  transform-origin: center top;
+
+  background:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(255,255,255,0.15) 15%,
+      #fffde0 40%,
+      #ffffff 50%,
+      #ffe98a 65%,
+      rgba(255,200,60,0.15) 85%,
+      transparent 100%
+    );
+
+  animation:
+    frameLightRight
+    6s
+    linear
+    infinite;
+}
+
+
+/* =========================================================
+   LUZ INFERIOR
+   ========================================================= */
+
+.frame-light-bottom {
+  bottom: -2px;
+  right: 8%;
+  width: 84%;
+  height: 4px;
+
+  transform-origin: right center;
+
+  animation:
+    frameLightBottom
+    6s
+    linear
+    infinite;
+}
+
+
+/* =========================================================
+   LUZ IZQUIERDA
+   ========================================================= */
+
+.frame-light-left {
+  bottom: 8%;
+  left: -2px;
+  width: 4px;
+  height: 84%;
+
+  transform-origin: center bottom;
+
+  background:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(255,255,255,0.15) 15%,
+      #fffde0 40%,
+      #ffffff 50%,
+      #ffe98a 65%,
+      rgba(255,200,60,0.15) 85%,
+      transparent 100%
+    );
+
+  animation:
+    frameLightLeft
+    6s
+    linear
+    infinite;
+}
+
+
+/* =========================================================
+   ANIMACIÓN LUZ — ARRIBA
+   ========================================================= */
+
+@keyframes frameLightTop {
+
+  0% {
+    left: 8%;
+    opacity: 0;
+    transform: scaleX(0.03);
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  23% {
+    left: 8%;
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  100% {
+    left: 8%;
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+
+/* =========================================================
+   ANIMACIÓN LUZ — DERECHA
+   ========================================================= */
+
+@keyframes frameLightRight {
+
+  0%,
+  24% {
+    top: 8%;
+    opacity: 0;
+    transform: scaleY(0.03);
+  }
+
+  32% {
+    opacity: 1;
+  }
+
+  47% {
+    top: 8%;
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  49% {
+    opacity: 0;
+  }
+
+  100% {
+    top: 8%;
+    opacity: 0;
+    transform: scaleY(1);
+  }
+}
+
+
+/* =========================================================
+   ANIMACIÓN LUZ — ABAJO
+   ========================================================= */
+
+@keyframes frameLightBottom {
+
+  0%,
+  48% {
+    right: 8%;
+    opacity: 0;
+    transform: scaleX(0.03);
+  }
+
+  56% {
+    opacity: 1;
+  }
+
+  71% {
+    right: 8%;
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  73% {
+    opacity: 0;
+  }
+
+  100% {
+    right: 8%;
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+
+/* =========================================================
+   ANIMACIÓN LUZ — IZQUIERDA
+   ========================================================= */
+
+@keyframes frameLightLeft {
+
+  0%,
+  72% {
+    bottom: 8%;
+    opacity: 0;
+    transform: scaleY(0.03);
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  95% {
+    bottom: 8%;
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  97% {
+    opacity: 0;
+  }
+
+  100% {
+    bottom: 8%;
+    opacity: 0;
+    transform: scaleY(1);
+  }
+}
+
+
+/* =========================================================
+   CONTENEDOR DE FOTOS
+   ========================================================= */
+
+.frame-inner {
+  width: 100%;
+  height: 100%;
+
+  position: relative;
+
+  overflow: hidden;
+
+  padding:
+    clamp(5px, 0.8vw, 10px);
+
+  border-radius: 15px;
+
+  background: #08050d;
+
+  box-shadow:
+    inset 0 0 25px
+    rgba(0,0,0,0.95);
+}
+
+
+/* =========================================================
+   CAPAS DE FOTOGRAFÍA
+   ========================================================= */
+
+.photo-layer {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+
+  transform-origin: center center;
+
+  will-change:
+    transform,
+    opacity,
+    clip-path,
+    filter;
+
+  backface-visibility: hidden;
+
+  isolation: isolate;
+}
+
+
+/* =========================================================
+   FOTO ACTUAL
+   ========================================================= */
+
+.photo-current {
+  z-index: 1;
+
+  opacity: 1;
+}
+
+
+/* =========================================================
+   FOTO FINAL
+   ========================================================= */
+
+.final-photo {
+  animation:
+    finalPhotoReveal
+    2s
+    ease-out
+    both;
+}
+
+@keyframes finalPhotoReveal {
+
+  0% {
+    transform: scale(1.08);
+    filter:
+      brightness(1.5)
+      blur(8px);
+  }
+
+  100% {
+    transform: scale(1.025);
+    filter:
+      brightness(1)
+      blur(0);
+  }
+}
+
+
+/* =========================================================
+   FOTO NUEVA
+   ========================================================= */
+
+.photo-next {
+  z-index: 3;
+
+  opacity: 1;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   IMÁGENES
+   ========================================================= */
+
+.main-photo {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center center;
+
+  background: #08050d;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+
+  will-change:
+    transform,
+    filter;
+
+  animation:
+    cinematicZoom
+    14s
+    ease-in-out
+    both;
+}
+
+
+/* =========================================================
+   TRANSICIÓN 1
+   FADE
+   ========================================================= */
+
+.transition-fade {
+  animation:
+    fadeTransition
+    3s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    )
+    both;
+}
+
+@keyframes fadeTransition {
+
+  0% {
+    opacity: 0;
+
+    transform:
+      scale(1.10);
+
+    filter:
+      brightness(1.8)
+      blur(14px);
+  }
+
+  20% {
+    opacity: 0.15;
+
+    transform:
+      scale(1.08);
+
+    filter:
+      brightness(1.6)
+      blur(10px);
+  }
+
+  45% {
+    opacity: 0.45;
+
+    transform:
+      scale(1.04);
+
+    filter:
+      brightness(1.3)
+      blur(5px);
+  }
+
+  70% {
+    opacity: 0.78;
+
+    transform:
+      scale(1.015);
+
+    filter:
+      brightness(1.08)
+      blur(1px);
+  }
+
+  100% {
+    opacity: 1;
+
+    transform:
+      scale(1);
+
+    filter:
+      brightness(1)
+      blur(0);
+  }
+}
+
+
+/* =========================================================
+   TRANSICIÓN 2
+   GRID
+   ========================================================= */
+
+.transition-grid {
+  animation:
+    gridReveal
+    3s
+    cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    )
+    both;
+}
+
+.transition-grid::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 4;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent 24%,
+      rgba(255,255,255,0.8) 25%,
+      transparent 26%,
+      transparent 49%,
+      rgba(255,255,255,0.8) 50%,
+      transparent 51%,
+      transparent 74%,
+      rgba(255,255,255,0.8) 75%,
+      transparent 76%
+    ),
+
+    linear-gradient(
+      0deg,
+      transparent 24%,
+      rgba(255,255,255,0.8) 25%,
+      transparent 26%,
+      transparent 49%,
+      rgba(255,255,255,0.8) 50%,
+      transparent 51%,
+      transparent 74%,
+      rgba(255,255,255,0.8) 75%,
+      transparent 76%
+    );
+
+  background-size:
+    25% 25%,
+    25% 25%;
+
+  opacity: 0;
+
+  animation:
+    gridLines
+    3s
+    ease
+    both;
+}
+
+@keyframes gridReveal {
+
+  0% {
+    opacity: 0;
+
+    transform:
+      scale(0.88);
+
+    filter:
+      brightness(2)
+      blur(12px);
+
+    clip-path:
+      inset(
+        50% 50% 50% 50%
+      );
+  }
+
+  20% {
+    opacity: 0.3;
+
+    transform:
+      scale(0.92);
+
+    filter:
+      brightness(1.7)
+      blur(8px);
+
+    clip-path:
+      inset(
+        35% 35% 35% 35%
+      );
+  }
+
+  45% {
+    opacity: 0.55;
+
+    transform:
+      scale(0.97);
+
+    filter:
+      brightness(1.35)
+      blur(4px);
+
+    clip-path:
+      inset(
+        18% 18% 18% 18%
+      );
+  }
+
+  70% {
+    opacity: 0.85;
+
+    transform:
+      scale(1.01);
+
+    filter:
+      brightness(1.1)
+      blur(1px);
+
+    clip-path:
+      inset(
+        5% 5% 5% 5%
+      );
+  }
+
+  100% {
+    opacity: 1;
+
+    transform:
+      scale(1);
+
+    filter:
+      brightness(1)
+      blur(0);
+
+    clip-path:
+      inset(0 0 0 0);
+  }
+}
+
+@keyframes gridLines {
+
+  0% {
+    opacity: 0;
+
+    transform:
+      scale(1.25);
+  }
+
+  25% {
+    opacity: 0.9;
+
+    transform:
+      scale(1.08);
+  }
+
+  55% {
+    opacity: 0.5;
+
+    transform:
+      scale(1.02);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      scale(1);
+  }
+}
+
+
+/* =========================================================
+   TRANSICIÓN 3
+   ONDA
+   ========================================================= */
+
+.transition-wave {
+  animation:
+    waveReveal
+    3s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    )
+    both;
+}
+
+.transition-wave::before {
+  content: "";
+
+  position: absolute;
+
+  top: -20%;
+  left: -40%;
+
+  width: 45%;
+  height: 140%;
+
+  z-index: 4;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,0.7),
+      transparent
+    );
+
+  filter: blur(12px);
+
+  transform:
+    skewX(-12deg);
+
+  animation:
+    waveLight
+    3s
+    ease-in-out
+    both;
+}
+
+@keyframes waveReveal {
+
+  0% {
+    opacity: 0;
+
+    transform:
+      translateX(-100px)
+      scale(1.10)
+      skewX(7deg);
+
+    filter:
+      blur(16px)
+      brightness(1.9);
+  }
+
+  25% {
+    opacity: 0.25;
+
+    transform:
+      translateX(-55px)
+      scale(1.06)
+      skewX(4deg);
+
+    filter:
+      blur(10px)
+      brightness(1.5);
+  }
+
+  50% {
+    opacity: 0.55;
+
+    transform:
+      translateX(-15px)
+      scale(1.03)
+      skewX(1deg);
+
+    filter:
+      blur(5px)
+      brightness(1.25);
+  }
+
+  75% {
+    opacity: 0.85;
+
+    transform:
+      translateX(5px)
+      scale(1.01)
+      skewX(0);
+
+    filter:
+      blur(1px)
+      brightness(1.05);
+  }
+
+  100% {
+    opacity: 1;
+
+    transform:
+      translateX(0)
+      scale(1)
+      skewX(0);
+
+    filter:
+      blur(0)
+      brightness(1);
+  }
+}
+
+@keyframes waveLight {
+
+  0% {
+    left: -45%;
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  55% {
+    opacity: 0.8;
+  }
+
+  100% {
+    left: 120%;
+    opacity: 0;
+  }
+}
+
+
+/* =========================================================
+   TRANSICIÓN 4
+   CÍRCULO DIVINO
+   ========================================================= */
+
+.transition-circle {
+  animation:
+    circleReveal
+    3s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    )
+    both;
+}
+
+@keyframes circleReveal {
+
+  0% {
+    opacity: 0;
+
+    clip-path:
+      circle(
+        0%
+        at 50% 50%
+      );
+
+    transform:
+      scale(1.12);
+
+    filter:
+      brightness(2.2)
+      blur(14px);
+  }
+
+  20% {
+    opacity: 0.15;
+
+    clip-path:
+      circle(
+        15%
+        at 50% 50%
+      );
+
+    filter:
+      brightness(1.8)
+      blur(9px);
+  }
+
+  45% {
+    opacity: 0.45;
+
+    clip-path:
+      circle(
+        40%
+        at 50% 50%
+      );
+
+    transform:
+      scale(1.06);
+
+    filter:
+      brightness(1.4)
+      blur(5px);
+  }
+
+  70% {
+    opacity: 0.8;
+
+    clip-path:
+      circle(
+        78%
+        at 50% 50%
+      );
+
+    transform:
+      scale(1.02);
+
+    filter:
+      brightness(1.1)
+      blur(1px);
+  }
+
+  100% {
+    opacity: 1;
+
+    clip-path:
+      circle(
+        150%
+        at 50% 50%
+      );
+
+    transform:
+      scale(1);
+
+    filter:
+      brightness(1)
+      blur(0);
+  }
+}
+
+
+/* =========================================================
+   DESTELLO CENTRAL
+   ========================================================= */
+
+.transition-flash {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 8;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255,255,255,0.95) 0%,
+      rgba(255,239,170,0.65) 12%,
+      rgba(255,220,100,0.25) 32%,
+      transparent 68%
+    );
+
+  mix-blend-mode:
+    screen;
+
+  animation:
+    transitionFlash
+    3s
+    ease-in-out
+    both;
+}
+
+@keyframes transitionFlash {
+
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  20% {
+    opacity: 0.12;
+    transform: scale(0.75);
+  }
+
+  38% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.28;
+    transform: scale(1.15);
+  }
+
+  68% {
+    opacity: 0.08;
+    transform: scale(1.35);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+
+/* =========================================================
+   ESCENA FINAL
+   ========================================================= */
+
+.final-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 10;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5,2,12,0.15),
+      rgba(5,2,12,0.72)
+    );
+
+  animation:
+    finalOverlayAppear
+    2.2s
+    ease
+    both;
+}
+
+@keyframes finalOverlayAppear {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* =========================================================
+   BRILLO FINAL
+   ========================================================= */
+
+.final-glow {
+  position: absolute;
+
+  width: 45%;
+  height: 45%;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,220,120,0.38),
+      transparent 70%
+    );
+
+  filter: blur(25px);
+
+  animation:
+    finalGlow
+    4s
+    ease-in-out
+    infinite;
+}
+
+@keyframes finalGlow {
+
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 0.8;
+  }
+}
+
+
+/* =========================================================
+   CONTENIDO FINAL
+   ========================================================= */
+
+.final-content {
+  position: relative;
+
+  z-index: 5;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  max-width: 90%;
+
+  padding: 25px;
+}
+
+.final-symbol {
+  font-size: 32px;
+
+  color: #fff1a8;
+
+  margin-bottom: 12px;
+
+  text-shadow:
+    0 0 10px #fff,
+    0 0 25px #f5d77b,
+    0 0 45px rgba(255,200,80,0.9);
+
+  animation:
+    finalSymbol
+    2.5s
+    ease-in-out
+    infinite;
+}
+
+@keyframes finalSymbol {
+
+  0%,
+  100% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+.final-content h2 {
+  font-size:
+    clamp(25px, 4vw, 42px);
+
+  font-weight: 500;
+
+  letter-spacing:
+    clamp(1px, 0.3vw, 3px);
+
+  color: #fff4c4;
+
+  text-shadow:
+    0 0 15px
+    rgba(255,230,150,0.7);
+}
+
+.final-content p {
+  margin-top: 10px;
+
+  font-size:
+    clamp(13px, 1.5vw, 17px);
+
+  color:
+    rgba(255,255,255,0.82);
+
+  letter-spacing: 1px;
+}
+
+.final-line {
+  width: 100px;
+
+  height: 1px;
+
+  margin:
+    22px 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #f5d77b,
+      transparent
+    );
+
+  box-shadow:
+    0 0 10px
+    rgba(255,220,120,0.8);
+}
+
+
+/* =========================================================
+   BOTONES FINALES
+   ========================================================= */
+
+.final-buttons {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 10px;
+
+  width: 100%;
+}
+
+.final-button {
+  min-width:
+    min(250px, 75vw);
+
+  padding:
+    13px 25px;
+
+  border-radius: 50px;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  letter-spacing: 2px;
+
+  font-weight: 500;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+.final-button:hover {
+  transform: translateY(-3px) scale(1.03);
+}
+
+.final-button.primary {
+  color: #251503;
+
+  border:
+    1px solid
+    #ffe89a;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff0a8,
+      #e2be5a
+    );
+
+  box-shadow:
+    0 0 15px
+    rgba(255,220,120,0.45),
+
+    0 0 35px
+    rgba(255,190,60,0.2);
+}
+
+.final-button.primary:hover {
+  box-shadow:
+    0 0 20px
+    rgba(255,235,150,0.8),
+
+    0 0 50px
+    rgba(255,190,60,0.35);
+}
+
+.final-button.secondary {
+  color:
+    rgba(255,255,255,0.9);
+
+  border:
+    1px solid
+    rgba(255,255,255,0.35);
+
+  background:
+    rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(8px);
+}
+
+.final-button.secondary:hover {
+  background:
+    rgba(255,255,255,0.16);
+
+  box-shadow:
+    0 0 20px
+    rgba(255,255,255,0.15);
+}
+
+
+/* =========================================================
+   DESTELLOS DEL MARCO
+   ========================================================= */
+
+.frame-spark {
+  position: absolute;
+
+  color: #fff2b0;
+
+  font-size:
+    clamp(14px, 2vw, 24px);
+
+  text-shadow:
+    0 0 8px #f5d77b,
+    0 0 20px #f5d77b,
+    0 0 35px
+    rgba(255,220,120,0.7);
+
+  animation:
+    sparkGlow
+    2.5s
+    ease-in-out
+    infinite;
+
+  z-index: 20;
+}
+
+.spark-1 {
+  top: -9px;
+  left: -9px;
+}
+
+.spark-2 {
+  top: -9px;
+  right: -9px;
+
+  animation-delay: 0.7s;
+}
+
+.spark-3 {
+  bottom: -9px;
+  left: -9px;
+
+  animation-delay: 1.2s;
+}
+
+.spark-4 {
+  bottom: -9px;
+  right: -9px;
+
+  animation-delay: 1.8s;
+}
+
+
+/* =========================================================
+   FRASE
+   ========================================================= */
+
+.romantic-phrase {
+  min-height: 32px;
+
+  margin-top:
+    clamp(12px, 2vh, 22px);
+
+  max-width: 90vw;
+
+  text-align: center;
+
+  font-size:
+    clamp(15px, 2vw, 21px);
+
+  letter-spacing: 1px;
+
+  color:
+    rgba(255,255,255,0.9);
+
+  text-shadow:
+    0 0 12px
+    rgba(255,255,255,0.35);
+
+  animation:
+    phraseAppear
+    1.5s
+    ease
+    both;
+
+  z-index: 20;
+}
+
+
+/* =========================================================
+   PIE
+   ========================================================= */
+
+.experience-footer {
+  width: min(900px, 94vw);
+
+  margin-top:
+    clamp(10px, 1.5vh, 18px);
+
+  text-align: center;
+
+  z-index: 20;
+}
+
+.project-name {
+  font-size:
+    clamp(12px, 1.8vw, 18px);
+
+  letter-spacing:
+    clamp(3px, 0.8vw, 7px);
+
+  color: #f1d277;
+
+  text-shadow:
+    0 0 12px
+    rgba(226,190,90,0.4);
+}
+
+.project-subtitle {
+  margin-top: 5px;
+
+  font-size:
+    clamp(7px, 0.9vw, 10px);
+
+  letter-spacing: 2px;
+
+  color:
+    rgba(255,255,255,0.45);
+}
+
+.photo-counter {
+  margin-top: 7px;
+
+  font-size: 9px;
+
+  letter-spacing: 3px;
+
+  color:
+    rgba(255,255,255,0.35);
+}
+
+
+/* =========================================================
+   ANIMACIONES GENERALES
+   ========================================================= */
+
+@keyframes heartbeat {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes starsMove {
+
+  from {
+    transform:
+      translateY(0);
+  }
+
+  to {
+    transform:
+      translateY(95px);
+  }
+}
+
+@keyframes floatingParticle {
+
+  0% {
+    opacity: 0;
+
+    transform:
+      translateY(20px)
+      scale(0.5);
+  }
+
+  30% {
+    opacity: 0.7;
+  }
+
+  70% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translateY(-80px)
+      scale(1.2);
+  }
+}
+
+
+/* =========================================================
+   ZOOM CINEMATOGRÁFICO
+   ========================================================= */
+
+@keyframes cinematicZoom {
+
+  0% {
+    transform:
+      scale(1);
+  }
+
+  100% {
+    transform:
+      scale(1.025);
+  }
+}
+
+
+/* =========================================================
+   DESTELLOS
+   ========================================================= */
+
+@keyframes sparkGlow {
+
+  0%,
+  100% {
+    opacity: 0.45;
+
+    transform:
+      scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform:
+      scale(1.2);
+  }
+}
+
+
+/* =========================================================
+   FRASES
+   ========================================================= */
+
+@keyframes phraseAppear {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE — CELULARES
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .experience {
+    padding:
+      18px
+      10px
+      14px;
+  }
+
+  .creator-header {
+    margin-bottom: 14px;
+  }
+
+  .cinematic-frame {
+    width: 94vw;
+
+    height: 61vh;
+
+    border-radius: 18px;
+
+    padding: 7px;
+  }
+
+  .frame-inner {
+    padding: 5px;
+  }
+
+  .romantic-phrase {
+    margin-top: 12px;
+
+    min-height: 28px;
+  }
+
+  .experience-footer {
+    margin-top: 8px;
+  }
+
+  .final-content {
+    padding: 15px;
+  }
+
+  .final-content h2 {
+    font-size: 25px;
+  }
+
+  .final-content p {
+    font-size: 13px;
+  }
+
+  .final-button {
+    min-width: 230px;
+    padding: 12px 18px;
+  }
+}
+
+
+/* =========================================================
+   CELULARES PEQUEÑOS
+   ========================================================= */
+
+@media (max-height: 700px) and (max-width: 600px) {
+
+  .creator-header {
+    margin-bottom: 8px;
+  }
+
+  .cinematic-frame {
+    height: 55vh;
+  }
+
+  .romantic-phrase {
+    margin-top: 7px;
+
+    font-size: 14px;
+  }
+
+  .experience-footer {
+    margin-top: 5px;
+  }
+
+  .final-content h2 {
+    font-size: 22px;
+  }
+
+  .final-line {
+    margin: 12px 0;
+  }
+}
+
+
+/* =========================================================
+   PANTALLAS GRANDES
+   ========================================================= */
+
+@media (min-width: 1200px) {
+
+  .cinematic-frame {
+    width:
+      min(1000px, 80vw);
+
+    height:
+      min(68vh, 650px);
+  }
+
+  .creator-header,
+  .experience-footer {
+    width:
+      min(1000px, 80vw);
+  }
+}
+
+
+/* =========================================================
+   CONTADOR DE REPRODUCCIONES
+   ========================================================= */
+
+.closed-card {
+  position: relative;
+}
+
+.play-counter {
+  position: absolute;
+
+  top: 18px;
+  left: 20px;
+
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 7px 12px;
+
+  border: 1px solid rgba(226, 190, 90, 0.35);
+  border-radius: 20px;
+
+  background: rgba(10, 7, 15, 0.55);
+
+  color: #e2be5a;
+
+  font-family: Georgia, serif;
+
+  font-size: 10px;
+
+  letter-spacing: 1.2px;
+
+  box-shadow:
+    0 0 12px rgba(226, 190, 90, 0.08);
+
+  backdrop-filter: blur(6px);
+}
+
+.play-counter-title {
+  opacity: 0.85;
+  white-space: nowrap;
+}
+
+.play-counter-number {
+  color: #ffdc78;
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+  min-width: 16px;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   MÓVIL
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .play-counter {
+    top: 12px;
+    left: 12px;
+
+    padding: 6px 9px;
+
+    font-size: 8px;
+
+    letter-spacing: 0.8px;
+  }
+
+  .play-counter-number {
+    font-size: 11px;
+  }
+
+}
