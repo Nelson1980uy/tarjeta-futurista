@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import "./App.css";
 
@@ -81,11 +80,17 @@ const CLAVE_REPRODUCCIONES =
 
 
 function obtenerReproducciones() {
-  try {
-    const guardado =
-      localStorage.getItem(CLAVE_REPRODUCCIONES);
 
-    const numero = Number(guardado);
+  try {
+
+    const guardado =
+      localStorage.getItem(
+        CLAVE_REPRODUCCIONES
+      );
+
+    const numero = Number(
+      guardado
+    );
 
     if (
       Number.isFinite(numero) &&
@@ -109,6 +114,7 @@ function obtenerReproducciones() {
 
 
 function guardarReproduccion() {
+
   try {
 
     const nuevoNumero =
@@ -129,6 +135,74 @@ function guardarReproduccion() {
     );
 
     return obtenerReproducciones();
+  }
+}
+
+
+/* =========================================================
+   CONTADOR DE DESCARGAS
+   ========================================================= */
+
+const CLAVE_DESCARGAS =
+  "tarjeta_futurista_descargas";
+
+
+function obtenerDescargas() {
+
+  try {
+
+    const guardado =
+      localStorage.getItem(
+        CLAVE_DESCARGAS
+      );
+
+    const numero = Number(
+      guardado
+    );
+
+    if (
+      Number.isFinite(numero) &&
+      numero >= 0
+    ) {
+      return numero;
+    }
+
+    return 0;
+
+  } catch (error) {
+
+    console.log(
+      "No se pudo leer el contador de descargas:",
+      error
+    );
+
+    return 0;
+  }
+}
+
+
+function guardarDescarga() {
+
+  try {
+
+    const nuevoNumero =
+      obtenerDescargas() + 1;
+
+    localStorage.setItem(
+      CLAVE_DESCARGAS,
+      String(nuevoNumero)
+    );
+
+    return nuevoNumero;
+
+  } catch (error) {
+
+    console.log(
+      "No se pudo guardar el contador de descargas:",
+      error
+    );
+
+    return obtenerDescargas();
   }
 }
 
@@ -168,12 +242,15 @@ function App() {
   const [reproducciones, setReproducciones] =
     useState(obtenerReproducciones);
 
+  const [descargas, setDescargas] =
+    useState(obtenerDescargas);
+
 
   /* =======================================================
      SISTEMA CINEMATOGRÁFICO DE FOTOS
 
      01 → 02 → 03 → ... → 12 → 01 → 02...
-     
+
      Las fotos continúan en ciclo hasta que
      termina la canción.
      ======================================================= */
@@ -241,15 +318,20 @@ function App() {
     return () => {
 
       if (transitionTimer) {
+
         clearTimeout(
           transitionTimer
         );
+
       }
 
+
       if (changeTimer) {
+
         clearTimeout(
           changeTimer
         );
+
       }
 
     };
@@ -270,13 +352,16 @@ function App() {
     const audio =
       document.getElementById("music");
 
+
     if (!audio) {
       return;
     }
 
+
     audio.currentTime = 0;
 
     audio.volume = 0.65;
+
 
     audio.play().catch((error) => {
 
@@ -297,6 +382,7 @@ function App() {
 
     const nuevoNumero =
       guardarReproduccion();
+
 
     setReproducciones(
       nuevoNumero
@@ -325,6 +411,22 @@ function App() {
       reproducirAudio();
 
     }, 300);
+  };
+
+
+  /* =======================================================
+     DESCARGAR AUDIO
+     ======================================================= */
+
+  const descargarAudio = () => {
+
+    const nuevoNumero =
+      guardarDescarga();
+
+
+    setDescargas(
+      nuevoNumero
+    );
   };
 
 
@@ -392,6 +494,7 @@ function App() {
 
         audio.volume = 0.65;
 
+
         audio.play().catch((error) => {
 
           console.log(
@@ -422,6 +525,7 @@ function App() {
       audio.pause();
 
       audio.currentTime = 0;
+
     }
 
 
@@ -472,7 +576,7 @@ function App() {
 
 
           {/* =================================================
-              CONTADOR
+              CONTADOR DE REPRODUCCIONES
              ================================================= */}
 
           <div className="play-counter">
@@ -488,43 +592,23 @@ function App() {
           </div>
 
 
-          {/* =================================================
-              BRILLO
-             ================================================= */}
-
           <div className="card-glow"></div>
 
-
-          {/* =================================================
-              CORAZÓN
-             ================================================= */}
 
           <div className="card-icon">
             ♥
           </div>
 
 
-          {/* =================================================
-              TÍTULO
-             ================================================= */}
-
           <h1>
             Una sorpresa para ti
           </h1>
 
 
-          {/* =================================================
-              DESCRIPCIÓN
-             ================================================= */}
-
           <p>
             Hay algo especial esperando dentro...
           </p>
 
-
-          {/* =================================================
-              BOTÓN
-             ================================================= */}
 
           <button
             className="open-button"
@@ -632,10 +716,6 @@ function App() {
             <div className="frame-light frame-light-left"></div>
 
 
-            {/* =================================================
-                CONTENIDO
-               ================================================= */}
-
             <div className="frame-inner">
 
 
@@ -715,13 +795,16 @@ function App() {
                       ✦
                     </div>
 
+
                     <h2>
                       Gracias por sentirlo
                     </h2>
 
+
                     <p>
                       Este momento queda contigo.
                     </p>
+
 
                     <div className="final-line"></div>
 
@@ -794,6 +877,70 @@ function App() {
 
 
           {/* =================================================
+              DESCARGA DEL AUDIO
+             ================================================= */}
+
+          {!songFinished && (
+
+            <div className="audio-download">
+
+
+              <div className="audio-download-label">
+                ✦ AUDIO ORIGINAL
+              </div>
+
+
+              <div className="audio-download-title">
+                Te quiero así
+              </div>
+
+
+              <div className="audio-download-author">
+                Autor: Nelson Lapizaga
+              </div>
+
+
+              {/* =================================================
+                  CONTADOR + BOTÓN
+                 ================================================= */}
+
+              <div className="audio-download-bottom">
+
+
+                {/* CONTADOR */}
+
+                <div className="audio-download-counter">
+
+                  <span className="audio-download-counter-symbol">
+                    ↓
+                  </span>
+
+                  <span className="audio-download-counter-number">
+                    {descargas}
+                  </span>
+
+                </div>
+
+
+                {/* BOTÓN */}
+
+                <a
+                  className="audio-download-button"
+                  href={cancion}
+                  download="Te quiero asi - Nelson Lapizaga.mp3"
+                  onClick={descargarAudio}
+                >
+                  DESCARGAR AUDIO ↓
+                </a>
+
+              </div>
+
+            </div>
+
+          )}
+
+
+          {/* =================================================
               PIE
              ================================================= */}
 
@@ -835,4 +982,3 @@ function App() {
 
 
 export default App;
-
