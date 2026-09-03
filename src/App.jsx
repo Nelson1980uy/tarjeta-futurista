@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import "./App.css";
 
@@ -33,7 +34,7 @@ const fotos = [
   foto09,
   foto10,
   foto11,
-  foto12,
+  foto12
 ];
 
 
@@ -47,7 +48,7 @@ const frases = [
   "Eres muy especial para mí",
   "Me haces sonreír",
   "Qué bonito tenerte en mi vida",
-  "Me encanta tu forma de ser",
+  "Me encanta tu forma de ser"
 ];
 
 
@@ -59,7 +60,7 @@ const transiciones = [
   "transition-fade",
   "transition-grid",
   "transition-wave",
-  "transition-circle",
+  "transition-circle"
 ];
 
 
@@ -82,9 +83,7 @@ const CLAVE_REPRODUCCIONES =
 function obtenerReproducciones() {
   try {
     const guardado =
-      localStorage.getItem(
-        CLAVE_REPRODUCCIONES
-      );
+      localStorage.getItem(CLAVE_REPRODUCCIONES);
 
     const numero = Number(guardado);
 
@@ -140,6 +139,7 @@ function guardarReproduccion() {
 
 function App() {
 
+
   /* =======================================================
      ESTADOS
      ======================================================= */
@@ -171,6 +171,11 @@ function App() {
 
   /* =======================================================
      SISTEMA CINEMATOGRÁFICO DE FOTOS
+
+     01 → 02 → 03 → ... → 12 → 01 → 02...
+     
+     Las fotos continúan en ciclo hasta que
+     termina la canción.
      ======================================================= */
 
   useEffect(() => {
@@ -179,56 +184,67 @@ function App() {
       return;
     }
 
-    if (currentPhoto >= fotos.length - 1) {
-      return;
-    }
+    let transitionTimer = null;
+    let changeTimer = null;
 
-    let transitionTimer;
-    let changeTimer;
 
     const comenzarTransicion = () => {
 
       const siguiente =
-        currentPhoto + 1;
+        (currentPhoto + 1) % fotos.length;
 
-      setNextPhoto(siguiente);
+
+      setNextPhoto(
+        siguiente
+      );
+
 
       setTransition(
         transiciones[
-          currentPhoto %
-          transiciones.length
+          currentPhoto % transiciones.length
         ]
       );
 
-      setIsTransitioning(true);
 
-      changeTimer = setTimeout(() => {
+      setIsTransitioning(
+        true
+      );
 
-        setCurrentPhoto(siguiente);
 
-        setCurrentPhrase(
-          (prev) =>
-            (prev + 1) %
-            frases.length
-        );
+      changeTimer =
+        setTimeout(() => {
 
-        setIsTransitioning(false);
+          setCurrentPhoto(
+            siguiente
+          );
 
-      }, TIEMPO_TRANSICION);
+          setCurrentPhrase(
+            (prev) =>
+              (prev + 1) % frases.length
+          );
+
+          setIsTransitioning(
+            false
+          );
+
+        }, TIEMPO_TRANSICION);
     };
 
 
-    transitionTimer = setTimeout(
-      comenzarTransicion,
-      TIEMPO_FOTO
-    );
+    transitionTimer =
+      setTimeout(
+        comenzarTransicion,
+        TIEMPO_FOTO
+      );
 
 
     return () => {
 
-      clearTimeout(
-        transitionTimer
-      );
+      if (transitionTimer) {
+        clearTimeout(
+          transitionTimer
+        );
+      }
 
       if (changeTimer) {
         clearTimeout(
@@ -241,7 +257,7 @@ function App() {
   }, [
     opened,
     currentPhoto,
-    songFinished,
+    songFinished
   ]);
 
 
@@ -259,6 +275,7 @@ function App() {
     }
 
     audio.currentTime = 0;
+
     audio.volume = 0.65;
 
     audio.play().catch((error) => {
@@ -278,17 +295,13 @@ function App() {
 
   const abrirExperiencia = () => {
 
-    /*
-     * CADA VEZ QUE SE PULSA
-     * "ABRIR ✨", AUMENTA EL CONTADOR.
-     */
-
     const nuevoNumero =
       guardarReproduccion();
 
     setReproducciones(
       nuevoNumero
     );
+
 
     setOpened(true);
 
@@ -321,9 +334,14 @@ function App() {
 
   const terminarCancion = () => {
 
-    setSongFinished(true);
+    setSongFinished(
+      true
+    );
 
-    setIsTransitioning(false);
+    setIsTransitioning(
+      false
+    );
+
 
     setCurrentPhoto(
       fotos.length - 1
@@ -343,17 +361,13 @@ function App() {
 
   const volverASentir = () => {
 
-    /*
-     * NO AUMENTAMOS EL CONTADOR.
-     *
-     * "VOLVER A SENTIR" ES PARTE
-     * DE LA MISMA EXPERIENCIA.
-     */
-
     const audio =
       document.getElementById("music");
 
-    setSongFinished(false);
+
+    setSongFinished(
+      false
+    );
 
     setCurrentPhoto(0);
 
@@ -365,7 +379,9 @@ function App() {
       "transition-fade"
     );
 
-    setIsTransitioning(false);
+    setIsTransitioning(
+      false
+    );
 
 
     setTimeout(() => {
@@ -400,6 +416,7 @@ function App() {
     const audio =
       document.getElementById("music");
 
+
     if (audio) {
 
       audio.pause();
@@ -408,9 +425,13 @@ function App() {
     }
 
 
-    setSongFinished(false);
+    setSongFinished(
+      false
+    );
 
-    setIsTransitioning(false);
+    setIsTransitioning(
+      false
+    );
 
     setCurrentPhoto(0);
 
@@ -422,7 +443,9 @@ function App() {
       "transition-fade"
     );
 
-    setOpened(false);
+    setOpened(
+      false
+    );
   };
 
 
@@ -438,6 +461,7 @@ function App() {
       }`}
     >
 
+
       {/* =================================================
           TARJETA INICIAL
          ================================================= */}
@@ -445,6 +469,7 @@ function App() {
       {!opened && (
 
         <section className="love-card closed-card">
+
 
           {/* =================================================
               CONTADOR
@@ -509,6 +534,7 @@ function App() {
           </button>
 
         </section>
+
       )}
 
 
@@ -519,6 +545,7 @@ function App() {
       {opened && (
 
         <section className="experience">
+
 
           {/* =================================================
               AUDIO
@@ -611,6 +638,7 @@ function App() {
 
             <div className="frame-inner">
 
+
               {/* =================================================
                   FOTO ACTUAL
                  ================================================= */}
@@ -654,6 +682,7 @@ function App() {
                     />
 
                   </div>
+
                 )}
 
 
@@ -679,6 +708,7 @@ function App() {
 
                   <div className="final-glow"></div>
 
+
                   <div className="final-content">
 
                     <div className="final-symbol">
@@ -695,6 +725,7 @@ function App() {
 
                     <div className="final-line"></div>
 
+
                     <div className="final-buttons">
 
                       <button
@@ -703,6 +734,7 @@ function App() {
                       >
                         VOLVER A SENTIR ✨
                       </button>
+
 
                       <button
                         className="final-button secondary"
@@ -716,6 +748,7 @@ function App() {
                   </div>
 
                 </div>
+
               )}
 
             </div>
@@ -770,9 +803,11 @@ function App() {
               UNA SORPRESA PARA TI
             </div>
 
+
             <div className="project-subtitle">
               UNA EXPERIENCIA CREADA ESPECIALMENTE PARA TI
             </div>
+
 
             <div className="photo-counter">
 
@@ -791,6 +826,7 @@ function App() {
           </footer>
 
         </section>
+
       )}
 
     </main>
@@ -799,3 +835,4 @@ function App() {
 
 
 export default App;
+
