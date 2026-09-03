@@ -15,6 +15,7 @@ import foto11 from "./assets/fotos/foto11.jpg";
 import foto12 from "./assets/fotos/foto12.jpg";
 
 import cancion from "./assets/audio/cancion.mp3";
+import videoParaTi from "./assets/video/parati.mp4";
 
 
 /* =========================================================
@@ -80,17 +81,13 @@ const CLAVE_REPRODUCCIONES =
 
 
 function obtenerReproducciones() {
-
   try {
-
     const guardado =
       localStorage.getItem(
         CLAVE_REPRODUCCIONES
       );
 
-    const numero = Number(
-      guardado
-    );
+    const numero = Number(guardado);
 
     if (
       Number.isFinite(numero) &&
@@ -102,7 +99,6 @@ function obtenerReproducciones() {
     return 0;
 
   } catch (error) {
-
     console.log(
       "No se pudo leer el contador:",
       error
@@ -114,9 +110,7 @@ function obtenerReproducciones() {
 
 
 function guardarReproduccion() {
-
   try {
-
     const nuevoNumero =
       obtenerReproducciones() + 1;
 
@@ -128,7 +122,6 @@ function guardarReproduccion() {
     return nuevoNumero;
 
   } catch (error) {
-
     console.log(
       "No se pudo guardar el contador:",
       error
@@ -148,17 +141,13 @@ const CLAVE_DESCARGAS =
 
 
 function obtenerDescargas() {
-
   try {
-
     const guardado =
       localStorage.getItem(
         CLAVE_DESCARGAS
       );
 
-    const numero = Number(
-      guardado
-    );
+    const numero = Number(guardado);
 
     if (
       Number.isFinite(numero) &&
@@ -170,7 +159,6 @@ function obtenerDescargas() {
     return 0;
 
   } catch (error) {
-
     console.log(
       "No se pudo leer el contador de descargas:",
       error
@@ -182,9 +170,7 @@ function obtenerDescargas() {
 
 
 function guardarDescarga() {
-
   try {
-
     const nuevoNumero =
       obtenerDescargas() + 1;
 
@@ -196,7 +182,6 @@ function guardarDescarga() {
     return nuevoNumero;
 
   } catch (error) {
-
     console.log(
       "No se pudo guardar el contador de descargas:",
       error
@@ -217,6 +202,12 @@ function App() {
   /* =======================================================
      ESTADOS
      ======================================================= */
+
+  const [introFinished, setIntroFinished] =
+    useState(false);
+
+  const [videoStarted, setVideoStarted] =
+    useState(false);
 
   const [opened, setOpened] =
     useState(false);
@@ -247,12 +238,31 @@ function App() {
 
 
   /* =======================================================
+     INICIAR VIDEO
+     ======================================================= */
+
+  const iniciarVideo = () => {
+
+    setVideoStarted(true);
+
+  };
+
+
+  /* =======================================================
+     CUANDO TERMINA EL VIDEO
+     ======================================================= */
+
+  const terminarVideo = () => {
+
+    setVideoStarted(false);
+
+    setIntroFinished(true);
+
+  };
+
+
+  /* =======================================================
      SISTEMA CINEMATOGRÁFICO DE FOTOS
-
-     01 → 02 → 03 → ... → 12 → 01 → 02...
-
-     Las fotos continúan en ciclo hasta que
-     termina la canción.
      ======================================================= */
 
   useEffect(() => {
@@ -318,20 +328,16 @@ function App() {
     return () => {
 
       if (transitionTimer) {
-
         clearTimeout(
           transitionTimer
         );
-
       }
 
 
       if (changeTimer) {
-
         clearTimeout(
           changeTimer
         );
-
       }
 
     };
@@ -371,6 +377,7 @@ function App() {
       );
 
     });
+
   };
 
 
@@ -411,6 +418,7 @@ function App() {
       reproducirAudio();
 
     }, 300);
+
   };
 
 
@@ -427,6 +435,7 @@ function App() {
     setDescargas(
       nuevoNumero
     );
+
   };
 
 
@@ -436,14 +445,9 @@ function App() {
 
   const terminarCancion = () => {
 
-    setSongFinished(
-      true
-    );
+    setSongFinished(true);
 
-    setIsTransitioning(
-      false
-    );
-
+    setIsTransitioning(false);
 
     setCurrentPhoto(
       fotos.length - 1
@@ -454,6 +458,7 @@ function App() {
     );
 
     setCurrentPhrase(0);
+
   };
 
 
@@ -467,9 +472,7 @@ function App() {
       document.getElementById("music");
 
 
-    setSongFinished(
-      false
-    );
+    setSongFinished(false);
 
     setCurrentPhoto(0);
 
@@ -481,9 +484,7 @@ function App() {
       "transition-fade"
     );
 
-    setIsTransitioning(
-      false
-    );
+    setIsTransitioning(false);
 
 
     setTimeout(() => {
@@ -507,6 +508,7 @@ function App() {
       }
 
     }, 150);
+
   };
 
 
@@ -529,13 +531,9 @@ function App() {
     }
 
 
-    setSongFinished(
-      false
-    );
+    setSongFinished(false);
 
-    setIsTransitioning(
-      false
-    );
+    setIsTransitioning(false);
 
     setCurrentPhoto(0);
 
@@ -547,9 +545,17 @@ function App() {
       "transition-fade"
     );
 
-    setOpened(
-      false
-    );
+    setOpened(false);
+
+    /*
+      IMPORTANTE:
+      Ahora vuelve realmente al sobre inicial.
+    */
+
+    setVideoStarted(false);
+
+    setIntroFinished(false);
+
   };
 
 
@@ -561,23 +567,190 @@ function App() {
 
     <main
       className={`app ${
-        opened ? "opened" : ""
+        opened
+          ? "opened"
+          : ""
       }`}
     >
+
+
+      {/* =================================================
+          INTRODUCCIÓN DEL SOBRE PREMIUM
+         ================================================= */}
+
+      {!introFinished && !videoStarted && (
+
+        <section className="envelope-intro">
+
+          <div className="premium-envelope-background"></div>
+
+          <div className="premium-envelope-glow"></div>
+
+
+          <div className="premium-envelope-scene">
+
+
+            {/* =================================================
+                SOBRE
+               ================================================= */}
+
+            <div className="premium-envelope">
+
+
+              <div className="premium-envelope-top-glow"></div>
+
+
+              <div className="premium-envelope-flap"></div>
+
+
+              <div className="premium-envelope-front">
+
+
+                <div className="premium-envelope-seal">
+
+                  <span>
+                    ♥
+                  </span>
+
+                </div>
+
+
+                <div className="premium-envelope-label">
+
+                  <span className="premium-envelope-title">
+                    PARA TI
+                  </span>
+
+
+                  <span className="premium-envelope-line">
+                    ✦
+                  </span>
+
+
+                  <span className="premium-envelope-subtitle">
+                    UNA SORPRESA ESPECIAL
+                  </span>
+
+                </div>
+
+
+              </div>
+
+
+              <div className="premium-envelope-shine"></div>
+
+
+            </div>
+
+
+            {/* =================================================
+                BOTÓN
+               ================================================= */}
+
+            <button
+              className="premium-envelope-button"
+              onClick={iniciarVideo}
+            >
+
+              <span className="premium-envelope-button-text">
+                ABRIR
+              </span>
+
+              <span className="premium-envelope-button-heart">
+                ♥
+              </span>
+
+            </button>
+
+
+          </div>
+
+        </section>
+
+      )}
+
+
+      {/* =================================================
+          VIDEO DE INTRODUCCIÓN
+         ================================================= */}
+
+      {videoStarted && (
+
+        <section className="video-intro">
+
+
+          <div className="video-cinematic-frame">
+
+
+            {/* =================================================
+                LUZ DEL MARCO
+               ================================================= */}
+
+            <div className="video-frame-light video-frame-light-top"></div>
+
+            <div className="video-frame-light video-frame-light-right"></div>
+
+            <div className="video-frame-light video-frame-light-bottom"></div>
+
+            <div className="video-frame-light video-frame-light-left"></div>
+
+
+            {/* =================================================
+                BORDE INTERIOR
+               ================================================= */}
+
+            <div className="video-frame-inner">
+
+
+              <video
+                className="intro-video"
+                src={videoParaTi}
+                autoPlay
+                playsInline
+                controls={false}
+                onEnded={terminarVideo}
+              />
+
+
+            </div>
+
+
+            {/* =================================================
+                DESTELLOS
+               ================================================= */}
+
+            <div className="video-frame-spark video-spark-1">
+              ✦
+            </div>
+
+            <div className="video-frame-spark video-spark-2">
+              ✦
+            </div>
+
+            <div className="video-frame-spark video-spark-3">
+              ✧
+            </div>
+
+            <div className="video-frame-spark video-spark-4">
+              ✧
+            </div>
+
+
+          </div>
+
+
+        </section>
+
+      )}
 
 
       {/* =================================================
           TARJETA INICIAL
          ================================================= */}
 
-      {!opened && (
+      {introFinished && !opened && (
 
         <section className="love-card closed-card">
-
-
-          {/* =================================================
-              CONTADOR DE REPRODUCCIONES
-             ================================================= */}
 
           <div className="play-counter">
 
@@ -601,7 +774,7 @@ function App() {
 
 
           <h1>
-            Una sorpresa para ti
+            Esto es para ti
           </h1>
 
 
@@ -791,6 +964,7 @@ function App() {
 
                   <div className="final-content">
 
+
                     <div className="final-symbol">
                       ✦
                     </div>
@@ -808,6 +982,60 @@ function App() {
 
                     <div className="final-line"></div>
 
+
+                    {/* =================================================
+                        AUDIO ORIGINAL
+                       ================================================= */}
+
+                    <div className="audio-download">
+
+                      <div className="audio-download-label">
+                        ✦ AUDIO ORIGINAL
+                      </div>
+
+
+                      <div className="audio-download-title">
+                        Te quiero así
+                      </div>
+
+
+                      <div className="audio-download-author">
+                        
+                      </div>
+
+
+                      <div className="audio-download-bottom">
+
+                        <div className="audio-download-counter">
+
+                          <span className="audio-download-counter-symbol">
+                            ↓
+                          </span>
+
+                          <span className="audio-download-counter-number">
+                            {descargas}
+                          </span>
+
+                        </div>
+
+
+                        <a
+                          className="audio-download-button"
+                          href={cancion}
+                          download="Te quiero asi.mp3"
+                          onClick={descargarAudio}
+                        >
+                          DESCARGAR AUDIO ↓
+                        </a>
+
+                      </div>
+
+                    </div>
+
+
+                    {/* =================================================
+                        BOTONES FINALES
+                       ================================================= */}
 
                     <div className="final-buttons">
 
@@ -827,6 +1055,7 @@ function App() {
                       </button>
 
                     </div>
+
 
                   </div>
 
@@ -871,70 +1100,6 @@ function App() {
               className="romantic-phrase"
             >
               {frases[currentPhrase]}
-            </div>
-
-          )}
-
-
-          {/* =================================================
-              DESCARGA DEL AUDIO
-             ================================================= */}
-
-          {!songFinished && (
-
-            <div className="audio-download">
-
-
-              <div className="audio-download-label">
-                ✦ AUDIO ORIGINAL
-              </div>
-
-
-              <div className="audio-download-title">
-                Te quiero así
-              </div>
-
-
-              <div className="audio-download-author">
-                Autor: Nelson Lapizaga
-              </div>
-
-
-              {/* =================================================
-                  CONTADOR + BOTÓN
-                 ================================================= */}
-
-              <div className="audio-download-bottom">
-
-
-                {/* CONTADOR */}
-
-                <div className="audio-download-counter">
-
-                  <span className="audio-download-counter-symbol">
-                    ↓
-                  </span>
-
-                  <span className="audio-download-counter-number">
-                    {descargas}
-                  </span>
-
-                </div>
-
-
-                {/* BOTÓN */}
-
-                <a
-                  className="audio-download-button"
-                  href={cancion}
-                  download="Te quiero asi - Nelson Lapizaga.mp3"
-                  onClick={descargarAudio}
-                >
-                  DESCARGAR AUDIO ↓
-                </a>
-
-              </div>
-
             </div>
 
           )}
