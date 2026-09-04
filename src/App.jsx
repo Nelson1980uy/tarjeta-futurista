@@ -1,41 +1,10 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-import foto01 from "./assets/fotos/foto01.jpg";
-import foto02 from "./assets/fotos/foto02.jpg";
-import foto03 from "./assets/fotos/foto03.jpg";
-import foto04 from "./assets/fotos/foto04.jpg";
-import foto05 from "./assets/fotos/foto05.jpg";
-import foto06 from "./assets/fotos/foto06.jpg";
-import foto07 from "./assets/fotos/foto07.jpg";
-import foto08 from "./assets/fotos/foto08.jpg";
-import foto09 from "./assets/fotos/foto09.jpg";
-import foto10 from "./assets/fotos/foto10.jpg";
-import foto11 from "./assets/fotos/foto11.jpg";
-import foto12 from "./assets/fotos/foto12.jpg";
-
-import cancion from "./assets/audio/cancion.mp3";
 import videoParaTi from "./assets/video/parati.mp4";
+import colibriImg from "./assets/colibri/colibri.png";
+import colibriSound from "./assets/colibri/colibri.mp3";
 
-
-/* =========================================================
-   FOTOGRAFÍAS
-   ========================================================= */
-
-const fotos = [
-  foto01,
-  foto02,
-  foto03,
-  foto04,
-  foto05,
-  foto06,
-  foto07,
-  foto08,
-  foto09,
-  foto10,
-  foto11,
-  foto12
-];
 
 
 /* =========================================================
@@ -73,19 +42,21 @@ const TIEMPO_TRANSICION = 3000;
 
 
 /* =========================================================
-   CONTADOR DE REPRODUCCIONES
+   CONTADORES
    ========================================================= */
 
 const CLAVE_REPRODUCCIONES =
   "tarjeta_futurista_reproducciones";
 
+const CLAVE_DESCARGAS =
+  "tarjeta_futurista_descargas";
+
 
 function obtenerReproducciones() {
   try {
-    const guardado =
-      localStorage.getItem(
-        CLAVE_REPRODUCCIONES
-      );
+    const guardado = localStorage.getItem(
+      CLAVE_REPRODUCCIONES
+    );
 
     const numero = Number(guardado);
 
@@ -99,6 +70,7 @@ function obtenerReproducciones() {
     return 0;
 
   } catch (error) {
+
     console.log(
       "No se pudo leer el contador:",
       error
@@ -110,7 +82,9 @@ function obtenerReproducciones() {
 
 
 function guardarReproduccion() {
+
   try {
+
     const nuevoNumero =
       obtenerReproducciones() + 1;
 
@@ -122,6 +96,7 @@ function guardarReproduccion() {
     return nuevoNumero;
 
   } catch (error) {
+
     console.log(
       "No se pudo guardar el contador:",
       error
@@ -132,16 +107,10 @@ function guardarReproduccion() {
 }
 
 
-/* =========================================================
-   CONTADOR DE DESCARGAS
-   ========================================================= */
-
-const CLAVE_DESCARGAS =
-  "tarjeta_futurista_descargas";
-
-
 function obtenerDescargas() {
+
   try {
+
     const guardado =
       localStorage.getItem(
         CLAVE_DESCARGAS
@@ -159,6 +128,7 @@ function obtenerDescargas() {
     return 0;
 
   } catch (error) {
+
     console.log(
       "No se pudo leer el contador de descargas:",
       error
@@ -170,7 +140,9 @@ function obtenerDescargas() {
 
 
 function guardarDescarga() {
+
   try {
+
     const nuevoNumero =
       obtenerDescargas() + 1;
 
@@ -182,6 +154,7 @@ function guardarDescarga() {
     return nuevoNumero;
 
   } catch (error) {
+
     console.log(
       "No se pudo guardar el contador de descargas:",
       error
@@ -200,7 +173,28 @@ function App() {
 
 
   /* =======================================================
-     ESTADOS
+     ESTADOS DE CARGA
+     ======================================================= */
+
+  const [imagenesCargadas, setImagenesCargadas] =
+    useState([]);
+
+  const [audioCargado, setAudioCargado] =
+    useState(null);
+
+  const [configuracionLista, setConfiguracionLista] =
+    useState(false);
+
+    const [colibriActivo, setColibriActivo] =
+  useState(false);
+
+const [inicial1, setInicial1] = useState("");
+const [inicial2, setInicial2] = useState("");
+
+
+
+  /* =======================================================
+     ESTADOS DE LA EXPERIENCIA
      ======================================================= */
 
   const [introFinished, setIntroFinished] =
@@ -230,6 +224,11 @@ function App() {
   const [songFinished, setSongFinished] =
     useState(false);
 
+
+  /* =======================================================
+     CONTADORES
+     ======================================================= */
+
   const [reproducciones, setReproducciones] =
     useState(obtenerReproducciones);
 
@@ -238,14 +237,268 @@ function App() {
 
 
   /* =======================================================
+     LIMPIAR URLS TEMPORALES
+     ======================================================= */
+
+  useEffect(() => {
+
+    return () => {
+
+      imagenesCargadas.forEach((imagen) => {
+
+        URL.revokeObjectURL(
+          imagen.url
+        );
+
+      });
+
+      if (audioCargado) {
+
+        URL.revokeObjectURL(
+          audioCargado.url
+        );
+
+      }
+
+    };
+
+  }, []);
+
+
+  /* =======================================================
+     CARGAR 20+ IMÁGENES
+     ======================================================= */
+
+  const manejarImagenes = (event) => {
+
+    const archivos =
+      Array.from(event.target.files || []);
+
+
+    const imagenesValidas =
+      archivos.filter((archivo) =>
+        archivo.type.startsWith("image/")
+      );
+
+
+    if (imagenesValidas.length < 20) {
+
+      alert(
+        "Debes seleccionar como mínimo 20 fotografías."
+      );
+
+      event.target.value = "";
+
+      return;
+    }
+
+
+    /* =====================================================
+       LIBERAR IMÁGENES ANTERIORES
+       ===================================================== */
+
+    imagenesCargadas.forEach((imagen) => {
+
+      URL.revokeObjectURL(
+        imagen.url
+      );
+
+    });
+
+
+    /* =====================================================
+       CREAR URLS
+       ===================================================== */
+
+    const nuevasImagenes =
+      imagenesValidas.map(
+        (archivo, indice) => ({
+
+          id:
+            `${archivo.name}-${archivo.lastModified}-${indice}`,
+
+          archivo,
+
+          url:
+            URL.createObjectURL(
+              archivo
+            )
+
+        })
+      );
+
+
+    setImagenesCargadas(
+      nuevasImagenes
+    );
+
+
+    setConfiguracionLista(false);
+
+
+    event.target.value = "";
+  };
+
+
+  /* =======================================================
+     CARGAR AUDIO MP3 / MP4
+     ======================================================= */
+
+  const manejarAudio = (event) => {
+
+    const archivo =
+      event.target.files?.[0];
+
+
+    if (!archivo) {
+      return;
+    }
+
+
+    const esAudio =
+      archivo.type.startsWith("audio/");
+
+    const esMp3 =
+      archivo.name.toLowerCase().endsWith(".mp3");
+
+    const esMp4 =
+      archivo.name.toLowerCase().endsWith(".mp4");
+
+
+    if (!esAudio && !esMp3 && !esMp4) {
+
+      alert(
+        "Por favor selecciona un archivo MP3 o MP4."
+      );
+
+      event.target.value = "";
+
+      return;
+    }
+
+
+    if (audioCargado) {
+
+      URL.revokeObjectURL(
+        audioCargado.url
+      );
+
+    }
+
+
+    const nuevaURL =
+      URL.createObjectURL(
+        archivo
+      );
+
+
+    setAudioCargado({
+
+      archivo,
+
+      url: nuevaURL
+
+    });
+
+
+    setConfiguracionLista(false);
+
+
+    event.target.value = "";
+  };
+
+
+  /* =======================================================
+     VALIDAR CONFIGURACIÓN
+     ======================================================= */
+
+  const validarConfiguracion = () => {
+
+    if (imagenesCargadas.length < 20) {
+
+      alert(
+        "Necesitas cargar como mínimo 20 fotografías."
+      );
+
+      return;
+    }
+
+
+    if (!audioCargado) {
+
+      alert(
+        "Necesitas cargar una música MP3 o MP4."
+      );
+
+      return;
+    }
+
+
+    setConfiguracionLista(
+      true
+    );
+  };
+
+
+  /* =======================================================
      INICIAR VIDEO
      ======================================================= */
 
-  const iniciarVideo = () => {
+  /* =======================================================
+   INICIAR SECUENCIA DEL PICAFOLOR
+   ======================================================= */
+
+const iniciarVideo = () => {
+
+  // Evita que el usuario pueda activar
+  // la animación varias veces
+  if (colibriActivo) {
+    return;
+  }
+
+
+  // Activar picaflor
+  setColibriActivo(true);
+
+
+  // Reproducir sonido del picaflor
+  const sonidoColibri =
+    new Audio(colibriSound);
+
+  sonidoColibri.volume = 0.35;
+
+  sonidoColibri.play().catch(
+    (error) => {
+
+      console.log(
+        "El navegador no pudo reproducir el sonido del picaflor:",
+        error
+      );
+
+    }
+  );
+
+
+  /*
+   * Duración total de la escena:
+   *
+   * 0s     → aparece
+   * 1.5s   → vuela hacia el corazón
+   * 3.0s   → gira alrededor
+   * 4.5s   → segundo movimiento
+   * 6.5s   → se marcha
+   *
+   * Después comienza el video.
+   */
+
+  setTimeout(() => {
+
+    setColibriActivo(false);
 
     setVideoStarted(true);
 
-  };
+  }, 6500);
+};
 
 
   /* =======================================================
@@ -254,22 +507,30 @@ function App() {
 
   const terminarVideo = () => {
 
-    setVideoStarted(false);
+    setVideoStarted(
+      false
+    );
 
-    setIntroFinished(true);
-
+    setIntroFinished(
+      true
+    );
   };
 
 
   /* =======================================================
-     SISTEMA CINEMATOGRÁFICO DE FOTOS
+     SISTEMA CINEMATOGRÁFICO
      ======================================================= */
 
   useEffect(() => {
 
-    if (!opened || songFinished) {
+    if (
+      !opened ||
+      songFinished ||
+      imagenesCargadas.length === 0
+    ) {
       return;
     }
+
 
     let transitionTimer = null;
     let changeTimer = null;
@@ -278,7 +539,8 @@ function App() {
     const comenzarTransicion = () => {
 
       const siguiente =
-        (currentPhoto + 1) % fotos.length;
+        (currentPhoto + 1) %
+        imagenesCargadas.length;
 
 
       setNextPhoto(
@@ -288,7 +550,8 @@ function App() {
 
       setTransition(
         transiciones[
-          currentPhoto % transiciones.length
+          currentPhoto %
+          transiciones.length
         ]
       );
 
@@ -305,10 +568,13 @@ function App() {
             siguiente
           );
 
+
           setCurrentPhrase(
             (prev) =>
-              (prev + 1) % frases.length
+              (prev + 1) %
+              frases.length
           );
+
 
           setIsTransitioning(
             false
@@ -328,16 +594,20 @@ function App() {
     return () => {
 
       if (transitionTimer) {
+
         clearTimeout(
           transitionTimer
         );
+
       }
 
 
       if (changeTimer) {
+
         clearTimeout(
           changeTimer
         );
+
       }
 
     };
@@ -345,7 +615,8 @@ function App() {
   }, [
     opened,
     currentPhoto,
-    songFinished
+    songFinished,
+    imagenesCargadas.length
   ]);
 
 
@@ -356,7 +627,9 @@ function App() {
   const reproducirAudio = () => {
 
     const audio =
-      document.getElementById("music");
+      document.getElementById(
+        "music"
+      );
 
 
     if (!audio) {
@@ -369,15 +642,16 @@ function App() {
     audio.volume = 0.65;
 
 
-    audio.play().catch((error) => {
+    audio.play().catch(
+      (error) => {
 
-      console.log(
-        "El navegador bloqueó el audio:",
-        error
-      );
+        console.log(
+          "El navegador bloqueó el audio:",
+          error
+        );
 
-    });
-
+      }
+    );
   };
 
 
@@ -396,21 +670,39 @@ function App() {
     );
 
 
-    setOpened(true);
+    setOpened(
+      true
+    );
 
-    setSongFinished(false);
 
-    setCurrentPhoto(0);
+    setSongFinished(
+      false
+    );
 
-    setNextPhoto(1);
 
-    setCurrentPhrase(0);
+    setCurrentPhoto(
+      0
+    );
+
+
+    setNextPhoto(
+      1
+    );
+
+
+    setCurrentPhrase(
+      0
+    );
+
 
     setTransition(
       "transition-fade"
     );
 
-    setIsTransitioning(false);
+
+    setIsTransitioning(
+      false
+    );
 
 
     setTimeout(() => {
@@ -418,7 +710,6 @@ function App() {
       reproducirAudio();
 
     }, 300);
-
   };
 
 
@@ -435,30 +726,38 @@ function App() {
     setDescargas(
       nuevoNumero
     );
-
   };
 
 
   /* =======================================================
-     CUANDO TERMINA LA CANCIÓN
+     TERMINAR CANCIÓN
      ======================================================= */
 
   const terminarCancion = () => {
 
-    setSongFinished(true);
+    setSongFinished(
+      true
+    );
 
-    setIsTransitioning(false);
+
+    setIsTransitioning(
+      false
+    );
+
 
     setCurrentPhoto(
-      fotos.length - 1
+      imagenesCargadas.length - 1
     );
+
 
     setNextPhoto(
-      fotos.length - 1
+      imagenesCargadas.length - 1
     );
 
-    setCurrentPhrase(0);
 
+    setCurrentPhrase(
+      0
+    );
   };
 
 
@@ -469,22 +768,39 @@ function App() {
   const volverASentir = () => {
 
     const audio =
-      document.getElementById("music");
+      document.getElementById(
+        "music"
+      );
 
 
-    setSongFinished(false);
+    setSongFinished(
+      false
+    );
 
-    setCurrentPhoto(0);
 
-    setNextPhoto(1);
+    setCurrentPhoto(
+      0
+    );
 
-    setCurrentPhrase(0);
+
+    setNextPhoto(
+      1
+    );
+
+
+    setCurrentPhrase(
+      0
+    );
+
 
     setTransition(
       "transition-fade"
     );
 
-    setIsTransitioning(false);
+
+    setIsTransitioning(
+      false
+    );
 
 
     setTimeout(() => {
@@ -496,19 +812,20 @@ function App() {
         audio.volume = 0.65;
 
 
-        audio.play().catch((error) => {
+        audio.play().catch(
+          (error) => {
 
-          console.log(
-            "El navegador bloqueó el audio:",
-            error
-          );
+            console.log(
+              "El navegador bloqueó el audio:",
+              error
+            );
 
-        });
+          }
+        );
 
       }
 
     }, 150);
-
   };
 
 
@@ -519,7 +836,9 @@ function App() {
   const volverAlInicio = () => {
 
     const audio =
-      document.getElementById("music");
+      document.getElementById(
+        "music"
+      );
 
 
     if (audio) {
@@ -531,31 +850,49 @@ function App() {
     }
 
 
-    setSongFinished(false);
+    setSongFinished(
+      false
+    );
 
-    setIsTransitioning(false);
 
-    setCurrentPhoto(0);
+    setIsTransitioning(
+      false
+    );
 
-    setNextPhoto(1);
 
-    setCurrentPhrase(0);
+    setCurrentPhoto(
+      0
+    );
+
+
+    setNextPhoto(
+      1
+    );
+
+
+    setCurrentPhrase(
+      0
+    );
+
 
     setTransition(
       "transition-fade"
     );
 
-    setOpened(false);
 
-    /*
-      IMPORTANTE:
-      Ahora vuelve realmente al sobre inicial.
-    */
+    setOpened(
+      false
+    );
 
-    setVideoStarted(false);
 
-    setIntroFinished(false);
+    setVideoStarted(
+      false
+    );
 
+
+    setIntroFinished(
+      false
+    );
   };
 
 
@@ -575,93 +912,247 @@ function App() {
 
 
       {/* =================================================
-          INTRODUCCIÓN DEL SOBRE PREMIUM
+          PANTALLA DE CONFIGURACIÓN
          ================================================= */}
 
-      {!introFinished && !videoStarted && (
+      {!configuracionLista && (
 
-        <section className="envelope-intro">
+        <section className="upload-screen">
 
-          <div className="premium-envelope-background"></div>
+          <div className="upload-background"></div>
 
-          <div className="premium-envelope-glow"></div>
-
-
-          <div className="premium-envelope-scene">
+          <div className="upload-glow"></div>
 
 
-            {/* =================================================
-                SOBRE
-               ================================================= */}
+          <div className="upload-card">
 
-            <div className="premium-envelope">
-
-
-              <div className="premium-envelope-top-glow"></div>
+            <div className="upload-symbol">
+              ✦
+            </div>
 
 
-              <div className="premium-envelope-flap"></div>
+            <h1>
+              BIENVENIDO
+            </h1>
 
 
-              <div className="premium-envelope-front">
+            <h2>
+              PREPARA TU SORPRESA
+            </h2>
 
 
-                <div className="premium-envelope-seal">
-
-                  <span>
-                    ♥
-                  </span>
-
-                </div>
+            <p className="upload-description">
+              Antes de abrir la experiencia,
+              debes cargar tus recuerdos.
+            </p>
 
 
-                <div className="premium-envelope-label">
+            <div className="upload-requirements">
 
-                  <span className="premium-envelope-title">
-                    PARA TI
-                  </span>
+              <div className="upload-requirement">
 
+                <span className="upload-requirement-icon">
+                  📸
+                </span>
 
-                  <span className="premium-envelope-line">
-                    ✦
-                  </span>
+                <div>
 
+                  <strong>
+                    FOTOGRAFÍAS
+                  </strong>
 
-                  <span className="premium-envelope-subtitle">
-                    UNA SORPRESA ESPECIAL
-                  </span>
+                  <small>
+                    Mínimo 20 imágenes
+                  </small>
 
                 </div>
-
 
               </div>
 
 
-              <div className="premium-envelope-shine"></div>
+              <div className="upload-requirement">
 
+                <span className="upload-requirement-icon">
+                  🎵
+                </span>
+
+                <div>
+
+                  <strong>
+                    MÚSICA
+                  </strong>
+
+                  <small>
+                    MP3 o MP4
+                  </small>
+
+                </div>
+
+              </div>
 
             </div>
 
 
             {/* =================================================
-                BOTÓN
+                FOTOS
+               ================================================= */}
+
+            <label
+              className="upload-button"
+            >
+
+              <span>
+                📸
+              </span>
+
+              <strong>
+                SELECCIONAR FOTOGRAFÍAS
+              </strong>
+
+              <small>
+                Puedes seleccionar 20 o más
+              </small>
+
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={manejarImagenes}
+                hidden
+              />
+
+            </label>
+
+
+            <div className="upload-status">
+
+              {imagenesCargadas.length === 0 ? (
+
+                <span>
+                  ✦ Aún no has cargado fotografías
+                </span>
+
+              ) : (
+
+                <span className="upload-success">
+                  ✓ {imagenesCargadas.length} fotografías cargadas
+                </span>
+
+              )}
+
+            </div>
+
+
+            {/* =================================================
+                AUDIO
+               ================================================= */}
+
+            <label
+              className="upload-button"
+            >
+
+              <span>
+                🎵
+              </span>
+
+              <strong>
+                SELECCIONAR MÚSICA
+              </strong>
+
+              <small>
+                MP3 o MP4
+              </small>
+
+              <input
+                type="file"
+                accept=".mp3,.mp4,audio/*,video/mp4"
+                onChange={manejarAudio}
+                hidden
+              />
+
+            </label>
+
+
+            <div className="upload-status">
+
+              {!audioCargado ? (
+
+                <span>
+                  ✦ Aún no has seleccionado música
+                </span>
+
+              ) : (
+
+                <span className="upload-success">
+                  ✓ Música preparada:
+                  {" "}
+                  {audioCargado.archivo.name}
+                </span>
+
+              )}
+
+            </div>
+
+
+            {/* =================================================
+                PREVISUALIZACIÓN
+               ================================================= */}
+
+            {imagenesCargadas.length > 0 && (
+
+              <div className="upload-preview">
+
+                {imagenesCargadas
+                  .slice(0, 8)
+                  .map((imagen) => (
+
+                    <img
+                      key={imagen.id}
+                      src={imagen.url}
+                      alt="Vista previa"
+                    />
+
+                  ))}
+
+                {imagenesCargadas.length > 8 && (
+
+                  <div className="upload-more">
+                    +{imagenesCargadas.length - 8}
+                  </div>
+
+                )}
+
+              </div>
+
+            )}
+
+
+            {/* =================================================
+                BOTÓN CONTINUAR
                ================================================= */}
 
             <button
-              className="premium-envelope-button"
-              onClick={iniciarVideo}
+              className="upload-continue-button"
+              onClick={validarConfiguracion}
+              disabled={
+                imagenesCargadas.length < 20 ||
+                !audioCargado
+              }
             >
 
-              <span className="premium-envelope-button-text">
-                ABRIR
-              </span>
-
-              <span className="premium-envelope-button-heart">
-                ♥
-              </span>
+              {imagenesCargadas.length >= 20 &&
+              audioCargado
+                ? "CONTINUAR ✦"
+                : "CARGA 20 FOTOS Y UNA MÚSICA"
+              }
 
             </button>
 
+
+            <p className="upload-private">
+              ✦ Tus archivos se utilizan únicamente
+              para crear esta experiencia en tu navegador.
+            </p>
 
           </div>
 
@@ -671,20 +1162,165 @@ function App() {
 
 
       {/* =================================================
-          VIDEO DE INTRODUCCIÓN
+          SOBRE PREMIUM
+         ================================================= */}
+
+      {configuracionLista &&
+!introFinished &&
+!videoStarted && (
+
+  <section className="envelope-intro">
+
+    <div className="premium-envelope-background"></div>
+
+    <div className="premium-envelope-glow"></div>
+
+
+    <div
+      className={`premium-envelope-scene ${
+        colibriActivo
+          ? "colibri-active"
+          : ""
+      }`}
+    >
+
+
+      <div className="premium-envelope">
+
+        <div className="premium-envelope-top-glow"></div>
+
+        <div className="premium-envelope-flap"></div>
+
+
+        <div className="premium-envelope-front">
+
+          <div className="premium-envelope-seal">
+
+            <span>
+              ♥
+            </span>
+
+          </div>
+
+
+          <div className="premium-envelope-label">
+
+            <span className="premium-envelope-title">
+              PARA TI
+            </span>
+
+
+            <span className="premium-envelope-line">
+              ✦
+            </span>
+
+
+            <span className="premium-envelope-subtitle">
+              UNA SORPRESA ESPECIAL
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div className="premium-envelope-shine"></div>
+
+      </div>
+
+
+      {/* =================================================
+          BOTÓN ABRIR
+         ================================================= */}
+
+      <button
+        className={`premium-envelope-button ${
+          colibriActivo
+            ? "colibri-button-active"
+            : ""
+        }`}
+        onClick={iniciarVideo}
+        disabled={colibriActivo}
+      >
+
+        <span className="premium-envelope-button-text">
+
+          {colibriActivo
+            ? "ESPERA..."
+            : "ABRIR"}
+
+        </span>
+
+
+        <span className="premium-envelope-button-heart">
+          ♥
+        </span>
+
+      </button>
+
+
+      {/* =================================================
+          PICAFOLOR
+         ================================================= */}
+
+      {colibriActivo && (
+
+        <div
+          className="colibri-scene"
+          aria-hidden="true"
+        >
+
+          <div className="colibri-aura"></div>
+
+
+          <div className="colibri-flower">
+
+            <span className="flower-petal petal-1">
+              ✿
+            </span>
+
+            <span className="flower-petal petal-2">
+              ✿
+            </span>
+
+            <span className="flower-center">
+              ✦
+            </span>
+
+          </div>
+
+
+          <div className="colibri-flight">
+
+            <img
+              src={colibriImg}
+              alt=""
+              className="colibri-bird"
+            />
+
+          </div>
+
+        </div>
+
+      )}
+
+    </div>
+
+  </section>
+
+)}
+
+
+      {/* =================================================
+          VIDEO
          ================================================= */}
 
       {videoStarted && (
 
         <section className="video-intro">
 
-
           <div className="video-cinematic-frame">
 
-
-            {/* =================================================
-                LUZ DEL MARCO
-               ================================================= */}
 
             <div className="video-frame-light video-frame-light-top"></div>
 
@@ -695,12 +1331,7 @@ function App() {
             <div className="video-frame-light video-frame-light-left"></div>
 
 
-            {/* =================================================
-                BORDE INTERIOR
-               ================================================= */}
-
             <div className="video-frame-inner">
-
 
               <video
                 className="intro-video"
@@ -711,13 +1342,8 @@ function App() {
                 onEnded={terminarVideo}
               />
 
-
             </div>
 
-
-            {/* =================================================
-                DESTELLOS
-               ================================================= */}
 
             <div className="video-frame-spark video-spark-1">
               ✦
@@ -735,9 +1361,7 @@ function App() {
               ✧
             </div>
 
-
           </div>
-
 
         </section>
 
@@ -748,7 +1372,8 @@ function App() {
           TARJETA INICIAL
          ================================================= */}
 
-      {introFinished && !opened && (
+      {introFinished &&
+      !opened && (
 
         <section className="love-card closed-card">
 
@@ -768,9 +1393,149 @@ function App() {
           <div className="card-glow"></div>
 
 
-          <div className="card-icon">
-            ♥
-          </div>
+          {/* =================================================
+    SELECTOR DE INICIALES — RUEDITAS
+   ================================================= */}
+
+<div className="initials-selector">
+
+  <div className="initials-title">
+    ELIGE TUS INICIALES
+  </div>
+
+  {/* PRIMERA LETRA */}
+  <div className="wheel-selector">
+
+    <span className="initial-label">
+      PRIMERA LETRA
+    </span>
+
+    <div className="letter-wheel">
+
+      <button
+        type="button"
+        className="wheel-arrow"
+        onClick={() => {
+          const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          const actual = inicial1 || "A";
+          const posicion = letras.indexOf(actual);
+          const anterior =
+            letras[
+              (posicion - 1 + letras.length) %
+              letras.length
+            ];
+
+          setInicial1(anterior);
+        }}
+      >
+        ‹
+      </button>
+
+      <div className="wheel-center">
+        <span className="wheel-letter">
+          {inicial1 || "A"}
+        </span>
+      </div>
+
+      <button
+        type="button"
+        className="wheel-arrow"
+        onClick={() => {
+          const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          const actual = inicial1 || "A";
+          const posicion = letras.indexOf(actual);
+          const siguiente =
+            letras[
+              (posicion + 1) %
+              letras.length
+            ];
+
+          setInicial1(siguiente);
+        }}
+      >
+        ›
+      </button>
+
+    </div>
+
+  </div>
+
+
+  {/* SEGUNDA LETRA */}
+  <div className="wheel-selector">
+
+    <span className="initial-label">
+      SEGUNDA LETRA
+    </span>
+
+    <div className="letter-wheel">
+
+      <button
+        type="button"
+        className="wheel-arrow"
+        onClick={() => {
+          const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          const actual = inicial2 || "A";
+          const posicion = letras.indexOf(actual);
+          const anterior =
+            letras[
+              (posicion - 1 + letras.length) %
+              letras.length
+            ];
+
+          setInicial2(anterior);
+        }}
+      >
+        ‹
+      </button>
+
+      <div className="wheel-center">
+        <span className="wheel-letter">
+          {inicial2 || "A"}
+        </span>
+      </div>
+
+      <button
+        type="button"
+        className="wheel-arrow"
+        onClick={() => {
+          const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          const actual = inicial2 || "A";
+          const posicion = letras.indexOf(actual);
+          const siguiente =
+            letras[
+              (posicion + 1) %
+              letras.length
+            ];
+
+          setInicial2(siguiente);
+        }}
+      >
+        ›
+      </button>
+
+    </div>
+
+  </div>
+
+
+  {/* CORAZÓN */}
+
+  <div className="card-icon">
+
+    <span className="heart-symbol">
+      ♥
+    </span>
+
+    <span className="heart-initials">
+      {inicial1 || "•"}
+      {" "}
+      {inicial2 || "•"}
+    </span>
+
+  </div>
+
+</div>
 
 
           <h1>
@@ -805,27 +1570,19 @@ function App() {
 
 
           {/* =================================================
-              AUDIO
+              AUDIO DEL USUARIO
              ================================================= */}
 
           <audio
             id="music"
-            src={cancion}
+            src={audioCargado?.url}
             preload="auto"
             onEnded={terminarCancion}
           />
 
 
-          {/* =================================================
-              ESTRELLAS
-             ================================================= */}
-
           <div className="background-stars"></div>
 
-
-          {/* =================================================
-              PARTÍCULAS
-             ================================================= */}
 
           <div className="floating-particles">
 
@@ -851,15 +1608,15 @@ function App() {
 
             <div>
 
-              <strong>
-                NELSON LAPIZAGA
-              </strong>
+  <strong>
+    {inicial1 || "A"} {inicial2 || "A"}
+  </strong>
 
-              <small>
-                CREADOR
-              </small>
+  <small>
+    {audioCargado?.archivo?.name || "TU AUDIO"}
+  </small>
 
-            </div>
+</div>
 
             <span className="creator-line">
               ✦
@@ -905,7 +1662,11 @@ function App() {
               >
 
                 <img
-                  src={fotos[currentPhoto]}
+                  src={
+                    imagenesCargadas[
+                      currentPhoto
+                    ]?.url
+                  }
                   alt={`Momento ${
                     currentPhoto + 1
                   }`}
@@ -920,23 +1681,27 @@ function App() {
                  ================================================= */}
 
               {!songFinished &&
-                isTransitioning && (
+              isTransitioning && (
 
-                  <div
-                    className={`photo-layer photo-next ${transition}`}
-                  >
+                <div
+                  className={`photo-layer photo-next ${transition}`}
+                >
 
-                    <img
-                      src={fotos[nextPhoto]}
-                      alt={`Momento ${
-                        nextPhoto + 1
-                      }`}
-                      className="main-photo"
-                    />
+                  <img
+                    src={
+                      imagenesCargadas[
+                        nextPhoto
+                      ]?.url
+                    }
+                    alt={`Momento ${
+                      nextPhoto + 1
+                    }`}
+                    className="main-photo"
+                  />
 
-                  </div>
+                </div>
 
-                )}
+              )}
 
 
               {/* =================================================
@@ -944,11 +1709,11 @@ function App() {
                  ================================================= */}
 
               {!songFinished &&
-                isTransitioning && (
+              isTransitioning && (
 
-                  <div className="transition-flash"></div>
+                <div className="transition-flash"></div>
 
-                )}
+              )}
 
 
               {/* =================================================
@@ -963,7 +1728,6 @@ function App() {
 
 
                   <div className="final-content">
-
 
                     <div className="final-symbol">
                       ✦
@@ -995,12 +1759,12 @@ function App() {
 
 
                       <div className="audio-download-title">
-                        Te quiero así
+                        Tu música especial
                       </div>
 
 
                       <div className="audio-download-author">
-                        
+                        {audioCargado?.archivo?.name}
                       </div>
 
 
@@ -1021,8 +1785,11 @@ function App() {
 
                         <a
                           className="audio-download-button"
-                          href={cancion}
-                          download="Te quiero asi.mp3"
+                          href={audioCargado?.url}
+                          download={
+                            audioCargado?.archivo?.name ||
+                            "audio-especial.mp3"
+                          }
                           onClick={descargarAudio}
                         >
                           DESCARGAR AUDIO ↓
@@ -1067,7 +1834,7 @@ function App() {
 
 
             {/* =================================================
-                DESTELLOS DEL MARCO
+                DESTELLOS
                ================================================= */}
 
             <div className="frame-spark spark-1">
@@ -1130,12 +1897,13 @@ function App() {
               {" / "}
 
               {String(
-                fotos.length
+                imagenesCargadas.length
               ).padStart(2, "0")}
 
             </div>
 
           </footer>
+
 
         </section>
 
